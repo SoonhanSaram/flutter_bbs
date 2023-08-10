@@ -7,7 +7,7 @@ import ApiRouter from "./routes/bbsApi.js"
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-db.sequelize.sync({ force: true })
+db.sequelize.sync({ force: false })
     .then(() => {
         console.log('DB 연결 성공')
     })

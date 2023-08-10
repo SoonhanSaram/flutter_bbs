@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bbs/color_schemes.g.dart';
+import 'package:flutter_bbs/comps/board_list.dart';
 import 'package:flutter_bbs/comps/index.dart';
 import 'package:flutter_bbs/provider/functions_basic.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +34,7 @@ class FlutterBbs extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (context) => const Index(),
+          '/board': (context) => const BoardList(),
         },
       ),
     );

@@ -1,62 +1,25 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_bbs/provider/functions_basic.dart';
+import 'package:provider/provider.dart';
 
-class BoardList extends StatefulWidget {
+class BoardList extends StatelessWidget {
   const BoardList({super.key});
 
   @override
-  State<BoardList> createState() => _BoardListState();
-}
-
-class _BoardListState extends State<BoardList> {
-  List<String> boardNames = [];
-
-  Future<void> getBoardList() async {
-    final response = await http.get(
-      Uri.parse("http://192.168.0.5:3001/"),
-    );
-    final listName = jsonDecode(response.body);
-    for (int i = 0; i < listName.length; i++) {
-      boardNames.add(
-        listName[i]['bl_name'],
-      );
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getBoardList();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: boardNames.length,
-      itemBuilder: (
-        context,
-        index,
-      ) {
-        return GestureDetector(
-          onTap: () {},
-          child: Padding(
-            padding: const EdgeInsets.all(3.0),
-            child: Card(
-              elevation: 2,
-              child: ListTile(
-                title: Text(boardNames[index]),
-              ),
-            ),
-          ),
-        );
-      },
+    String currentBoard = context.watch<FunctionsBasic>().currentBoard;
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Text("$currentBoard 게시판"),
+          //  ListView.builder(
+          // itemBuilder: (context, index) {
+          // return const Card(
+          // child: ListTile(),
+          // );
+          // },
+        ),
+      ),
     );
   }
 }
