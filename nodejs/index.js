@@ -19,7 +19,7 @@ db.sequelize.sync({ force: false })
 // middle ware 설정
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join("public")));
 
 // router module 연결

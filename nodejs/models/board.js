@@ -2,33 +2,34 @@ import Sequelize from 'sequelize';
 export default (sequelize) => {
   return sequelize.define('board', {
     b_num: {
-      autoIncrement: true,
       type: Sequelize.DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true,
     },
     b_title: {
       type: Sequelize.DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false
     },
     b_text: {
       type: Sequelize.DataTypes.TEXT,
-      allowNull: true
+      allowNull: false
     },
     b_image: {
       type: Sequelize.DataTypes.BLOB,
       allowNull: true
     },
     b_sdate: {
-      type: Sequelize.DataTypes.STRING(20),
-      allowNull: true
+      type: Sequelize.DataTypes.DATE,
+      allowNull: true,
+      defaultValue: Sequelize.NOW
     },
     b_udate: {
-      type: Sequelize.DataTypes.STRING(20),
-      allowNull: true
+      type: Sequelize.DataTypes.DATE,
+      allowNull: true,
     },
     b_ddate: {
-      type: Sequelize.DataTypes.STRING(20),
+      type: Sequelize.DataTypes.DATE,
       allowNull: true
     },
     b_views: {
@@ -37,7 +38,11 @@ export default (sequelize) => {
     },
     b_nickname: {
       type: Sequelize.DataTypes.STRING(10),
-      allowNull: true
+      allowNull: false
+    },
+    b_category: {
+      type: Sequelize.DataTypes.STRING(20),
+      allowNull: false,
     }
   }, {
     sequelize,

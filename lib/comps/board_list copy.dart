@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bbs/provider/functions_basic.dart';
 import 'package:flutter_bbs/provider/functions_post.dart';
-import 'package:flutter_bbs/widgets/post_tiles.dart';
+import 'package:flutter_bbs/transitions/open_container.dart';
 import 'package:flutter_bbs/widgets/title_card.dart';
 import 'package:provider/provider.dart';
 
-class BoardList extends StatefulWidget {
-  const BoardList({super.key});
-
-  @override
-  State<BoardList> createState() => _BoardListState();
-}
-
-class _BoardListState extends State<BoardList> {
-  final bool _slowAnimation = false;
+class BoardListc extends StatelessWidget {
+  const BoardListc({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,18 +31,7 @@ class _BoardListState extends State<BoardList> {
                       shrinkWrap: true,
                       itemCount: functionsBasic.posts.length,
                       itemBuilder: (context, index) {
-                        return Card(
-                          elevation: 5,
-                          margin: const EdgeInsets.only(top: 8.0, bottom: 12.0, left: 8.0, right: 8.0),
-                          child: PostTiles(
-                            getPost: () {
-                              functionsPost.getPost(functionsBasic.posts[index]['b_num'], context);
-                            },
-                            views: functionsBasic.posts[index]['b_views'] ?? "",
-                            title: functionsBasic.posts[index]['b_title'] ?? "",
-                            nickname: functionsBasic.posts[index]['b_nickname'] ?? "",
-                          ),
-                        );
+                        return const Card(child: Text(""));
                       },
                     )
                   : titleCard(

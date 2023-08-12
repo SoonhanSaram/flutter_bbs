@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bbs/comps/main_list.dart';
+import 'package:flutter_bbs/widgets/title_card.dart';
 
 class Index extends StatelessWidget {
   const Index({super.key});
@@ -12,17 +13,12 @@ class Index extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
+            children: [
               Padding(
-                padding: EdgeInsets.all(5.0),
-                child: Card(
-                  child: Text(
-                    "플러터 게시판 프로젝트",
-                    style: TextStyle(fontSize: 36),
-                  ),
-                ),
+                padding: const EdgeInsets.all(5.0),
+                child: titleCard(title: "플러터 게시판 프로젝트"),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 500,
                 height: 800,
                 child: MainList(),

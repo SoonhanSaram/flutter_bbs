@@ -56,6 +56,7 @@ class _MainListState extends State<MainList> {
         index,
       ) {
         return GestureDetector(
+          // 게시글 쓰기로 들어가기 전에 BoardNames 이름을 저장하기 위한 함수
           onTap: () {
             functionsBasic.getBoardList(boardNames[index]);
             Navigator.pushNamed(context, '/board');
@@ -66,6 +67,7 @@ class _MainListState extends State<MainList> {
               elevation: 2,
               child: ListTile(
                 title: Text(boardNames[index]),
+                trailing: const Icon(Icons.chevron_right_outlined),
               ),
             ),
           ),
