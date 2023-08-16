@@ -60,7 +60,7 @@ class FlutterBbs extends StatelessWidget {
             },
           ),
         ),
-        themeMode: ThemeMode.system,
+        themeMode: ThemeMode.light,
         initialRoute: '/',
         routes: {
           '/': (context) => const Index(),
