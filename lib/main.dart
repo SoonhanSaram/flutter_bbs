@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bbs/color_schemes.g.dart';
 import 'package:flutter_bbs/comps/board_list.dart';
 import 'package:flutter_bbs/comps/index.dart';
+import 'package:flutter_bbs/comps/join.dart';
+import 'package:flutter_bbs/comps/login.dart';
 import 'package:flutter_bbs/comps/post_detail.dart';
 import 'package:flutter_bbs/comps/write_post.dart';
 import 'package:flutter_bbs/provider/functions_basic.dart';
 import 'package:flutter_bbs/provider/functions_post.dart';
+import 'package:flutter_bbs/provider/functions_user.dart';
 import 'package:flutter_bbs/provider/functions_writing.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +32,9 @@ class FlutterBbs extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => FunctionsPost(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => FunctionsUser(),
         )
       ],
       child: MaterialApp(
@@ -61,6 +67,8 @@ class FlutterBbs extends StatelessWidget {
           '/board': (context) => const BoardList(),
           '/writePost': (context) => const WritingPost(),
           '/postDetail': (context) => const PostDetail(),
+          '/join': (context) => const JoinPage(),
+          '/login': (context) => const LoginPage(),
         },
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bbs/provider/functions_post.dart';
 import 'package:flutter_bbs/widgets/title_card.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class PostDetail extends StatelessWidget {
@@ -9,6 +10,7 @@ class PostDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map<String, String> postData = context.read<FunctionsPost>().currentPost;
+    String sdate = DateFormat("yy년 MM월 dd일 hh:mm").format(DateTime.parse(postData['sdate']!));
     return SafeArea(
       child: Scaffold(
           body: SingleChildScrollView(
@@ -53,7 +55,7 @@ class PostDetail extends StatelessWidget {
                   "${postData['content']}",
                 ),
               ),
-              titleCard(title: "작성일자 : ${postData['sdate']}", size: 20),
+              titleCard(title: "작성일자 : $sdate", size: 20),
             ],
           ),
         ),

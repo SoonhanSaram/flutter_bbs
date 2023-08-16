@@ -1,10 +1,12 @@
 {
-  "type" : "module",
+  "type": "module",
   "dependencies": {
+    "crypto": "^1.0.1",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.1",
     "morgan": "^1.10.0",
-    "path": "^0.12.7",
     "mysql2": "^3.6.0",
+    "path": "^0.12.7",
     "sequelize": "^6.32.1",
     "sequelize-auto": "^0.8.8"
   }

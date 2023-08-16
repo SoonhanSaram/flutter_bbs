@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bbs/comps/drop_down_button.dart';
+import 'package:flutter_bbs/widgets/drop_down_button.dart';
 import 'package:flutter_bbs/provider/functions_basic.dart';
 import 'package:flutter_bbs/provider/functions_writing.dart';
 import 'package:flutter_bbs/widgets/button.dart';

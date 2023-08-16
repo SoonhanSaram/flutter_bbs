@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bbs/provider/functions_basic.dart';
+import 'package:flutter_bbs/provider/functions_user.dart';
 import 'package:flutter_bbs/provider/functions_writing.dart';
 import 'package:provider/provider.dart';
 
@@ -17,11 +18,12 @@ class _DropDownButtonsState extends State<DropDownButtons> {
     String currentBoard = context.watch<FunctionsBasic>().currentBoard;
     List<String> boardNames = context.watch<FunctionsBasic>().boardNames;
     FunctionsWriting functionsWriting = Provider.of<FunctionsWriting>((context), listen: false);
-
+    Function getMajor = context.watch<FunctionsUser>().getMajor;
     return PopupMenuButton<String>(
       onSelected: (String newValue) {
         setState(() {
           _selectedItem = newValue;
+          getMajor(newValue);
           functionsWriting.updateBoard(newValue);
         });
       },

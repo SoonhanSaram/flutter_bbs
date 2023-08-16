@@ -1,6 +1,6 @@
 import express from 'express';
 import db from '../models/index.js'
-import Sequelize from "sequelize"
+
 const bbsList = db.models.boardList
 const board = db.models.board
 const router = express.Router();

@@ -9,7 +9,9 @@ class FunctionsBasic extends ChangeNotifier {
   List<String> get boardNames => _boardNames;
   final List<Map<String, dynamic>> _posts = [];
   List<Map<String, dynamic>> get posts => _posts;
+
   Future<void> getBoard() async {
+    boardNames.clear();
     final response = await http.get(
       Uri.parse("http://192.168.0.5:3001/"),
     );
@@ -25,7 +27,6 @@ class FunctionsBasic extends ChangeNotifier {
   Future<void> getBoardList(String boardName) async {
     _posts.clear();
     if (boardName.isNotEmpty) {
-      print(boardName);
       _currentBoard = boardName;
       final response = await http.get(
         Uri.parse(

@@ -4,6 +4,10 @@ import morgan from "morgan";
 import db from "./models/index.js"
 
 import ApiRouter from "./routes/bbsApi.js"
+import UserApiRouter from "./routes/userApi.js"
+
+// jwt 인증 middleware
+import authMiddleware from "./middleware/authmiddleware.js";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -22,8 +26,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join("public")));
 
+
+
 // router module 연결
 app.use('/', ApiRouter);
+app.use('/user', UserApiRouter);
+
 
 app.use((req, res, next) => {
     const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
