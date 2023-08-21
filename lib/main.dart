@@ -8,6 +8,7 @@ import 'package:flutter_bbs/comps/post_detail.dart';
 import 'package:flutter_bbs/comps/write_post.dart';
 import 'package:flutter_bbs/provider/functions_basic.dart';
 import 'package:flutter_bbs/provider/functions_post.dart';
+import 'package:flutter_bbs/provider/functions_reply.dart';
 import 'package:flutter_bbs/provider/functions_user.dart';
 import 'package:flutter_bbs/provider/functions_writing.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +36,9 @@ class FlutterBbs extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => FunctionsUser(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => FunctionsReply(),
         )
       ],
       child: MaterialApp(

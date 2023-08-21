@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bbs/model/models_token.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class FunctionsUser extends ChangeNotifier {
   final _storage = const FlutterSecureStorage();
+  final ModelsToken _modelsToken = ModelsToken();
+
   String? _token;
   String? get token => _token;
 
@@ -36,6 +39,9 @@ class FunctionsUser extends ChangeNotifier {
   }
 
   void chekRegExpression(String type, String value) {
+    _emailValidation = false;
+    _passwrdValidation = false;
+    _nickNameValidation = false;
     if (type == "email") {
       String pattern = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]*@[a-zA-Z0-9]*.[a-zA-Z]{2,3}$";
       _emailValidation = RegExp(pattern).hasMatch(value);
@@ -122,6 +128,8 @@ class FunctionsUser extends ChangeNotifier {
 
     // node 서버로부터 받아온 token 담기
     final token = result['accessToken'];
+    _modelsToken.token = result['accessToken'];
+    print(_modelsToken.getToken);
     await _storage.write(
       key: 'userInfo',
       value: token,
@@ -138,6 +146,7 @@ class FunctionsUser extends ChangeNotifier {
   // token 업데이트
   Future<void> tokenUpdate() async {
     _token = await _storage.read(key: 'userInfo');
+    _modelsToken.token = await _storage.read(key: 'userInfo');
     print(_token);
     notifyListeners();
   }
@@ -146,6 +155,7 @@ class FunctionsUser extends ChangeNotifier {
   Future<void> tokenDelete() async {
     await _storage.delete(key: 'userInfo');
     _token = await _storage.read(key: 'userInfo');
+    _modelsToken.token = await _storage.read(key: 'userInfo');
     notifyListeners();
   }
 }

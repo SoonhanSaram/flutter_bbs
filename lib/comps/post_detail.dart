@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bbs/provider/functions_post.dart';
+import 'package:flutter_bbs/provider/functions_reply.dart';
+import 'package:flutter_bbs/widgets/custom_textfield.dart';
+import 'package:flutter_bbs/widgets/reply.dart';
 import 'package:flutter_bbs/widgets/title_card.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +14,7 @@ class PostDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     Map<String, String> postData = context.read<FunctionsPost>().currentPost;
     String sdate = DateFormat("yy년 MM월 dd일 hh:mm").format(DateTime.parse(postData['sdate']!));
-
+    FunctionsReply functionsReply = Provider.of<FunctionsReply>(context, listen: true);
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -24,6 +27,14 @@ class PostDetail extends StatelessWidget {
               _buildAuthorAndViews(postData['nickName'] ?? "", postData['views'] ?? ""),
               SizedBox(height: _getHeight(context, 0.02)),
               _buildContent(context, postData['content'] ?? ""),
+              CustomTextfield(
+                textEditingController: functionsReply.textEditingController,
+                hintText: "댓글을 입력해주세요",
+                onTapFunction: () {
+                  functionsReply.postReply();
+                },
+              ),
+              ReplyWidget(),
               _buildDate(sdate),
             ],
           ),
