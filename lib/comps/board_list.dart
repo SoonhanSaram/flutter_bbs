@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bbs/comps/post_detail.dart';
 import 'package:flutter_bbs/provider/functions_basic.dart';
 import 'package:flutter_bbs/provider/functions_post.dart';
+import 'package:flutter_bbs/provider/functions_reply.dart';
 import 'package:flutter_bbs/widgets/post_tiles.dart';
 import 'package:flutter_bbs/widgets/title_card.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +31,7 @@ class _BoardListState extends State<BoardList> {
     String currentBoard = context.watch<FunctionsBasic>().currentBoard;
     FunctionsBasic functionsBasic = Provider.of<FunctionsBasic>(context, listen: false);
     FunctionsPost functionsPost = Provider.of<FunctionsPost>(context, listen: false);
-
+    FunctionsReply functionsReply = Provider.of<FunctionsReply>(context, listen: false);
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -42,7 +43,7 @@ class _BoardListState extends State<BoardList> {
                 padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
                 child: _buildTitleCard(currentBoard),
               ),
-              functionsBasic.posts.isNotEmpty ? _buildPostListView(functionsBasic.posts, functionsPost) : _buildNoPostsMessage(),
+              functionsBasic.posts.isNotEmpty ? _buildPostListView(functionsBasic.posts, functionsPost, functionsReply) : _buildNoPostsMessage(),
             ],
           ),
         ),
@@ -57,7 +58,7 @@ class _BoardListState extends State<BoardList> {
     );
   }
 
-  Widget _buildPostListView(List<Map<String, dynamic>> posts, FunctionsPost functionsPost) {
+  Widget _buildPostListView(List<Map<String, dynamic>> posts, FunctionsPost functionsPost, FunctionsReply functionsReply) {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: posts.length,
@@ -75,6 +76,7 @@ class _BoardListState extends State<BoardList> {
               margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
               child: PostTiles(
                 getPost: () {
+                  functionsReply.getReply(posts[index]['b_num']);
                   functionsPost.getPost(posts[index]['b_num'], context);
                 },
                 views: posts[index]['b_views'] ?? "",

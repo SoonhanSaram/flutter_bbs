@@ -7,7 +7,6 @@ const authMiddleware = async (req, res, next) => {
     } else {
         try {
             const tokenInfo = await new Promise((resolve, reject) => {
-                console.log("실행");
                 jwt.verify(accessToken, configSecret, (err, decoded) => {
                     if (err) {
                         // console.log(err);

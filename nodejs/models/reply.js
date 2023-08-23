@@ -20,6 +20,10 @@ export default (sequelize) => {
             allowNull: false,
             defaultValue: 1,
         },
+        rb_num: {
+            type: Sequelize.DataTypes.INTEGER,
+            allowNull: false,
+        },
         b_sdate: {
             type: Sequelize.DataTypes.DATE,
             allowNull: true,
