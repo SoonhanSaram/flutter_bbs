@@ -6,7 +6,8 @@ import 'package:http/http.dart' as http;
 
 class FunctionsReply extends ChangeNotifier {
   TextEditingController textEditingController = TextEditingController();
-
+  int _postNumber = 0;
+  int get postNumber => _postNumber;
   void callSnackBar(context, String title) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -22,6 +23,11 @@ class FunctionsReply extends ChangeNotifier {
     );
   }
 
+  void savePostNumber(postNum) {
+    _postNumber = postNum;
+    notifyListeners();
+  }
+
   Future<List<Reply>> getReply(bNum) async {
     print(bNum);
     final response = await http.get(
@@ -30,7 +36,7 @@ class FunctionsReply extends ChangeNotifier {
       ),
       headers: {
         'Contents-Type': "Application/json",
-        "postNum": bNum.toString(),
+        "postnum": bNum.toString(),
       },
     );
 

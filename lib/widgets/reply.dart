@@ -2,54 +2,52 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bbs/model/models_reply.dart';
-import 'package:flutter_bbs/provider/functions_post.dart';
-import 'package:flutter_bbs/provider/functions_reply.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+
 class ReplyWidget extends StatefulWidget {
-   const ReplyWidget({super.key});
-  
+  ReplyWidget({
+    super.key,
+    required this.postNumber,
+  });
 
-
+  int postNumber;
   @override
   State<ReplyWidget> createState() => _ReplyWidgetState();
 }
 
 class _ReplyWidgetState extends State<ReplyWidget> {
-  List<Reply>? _replies;
+  late Future<List<Reply>> _replies;
 
-  Future<List<Reply>> getReply(bNum) async {
+  Future<List<Reply>> getReply(postNumber) async {
     final response = await http.get(
         Uri.parse(
-          "http://192.168.0.5:3001/reply/",
+          "http://192.168.0.5:3001/getReply/",
         ),
         headers: {
           'Contents-Type': "Application/json",
-          "b_num": bNum,
+          "postnum": postNumber.toString(),
         });
     final List<dynamic> result = jsonDecode(response.body);
     return result.map((json) => Reply.fromJson(json)).toList();
   }
 
-  void getReplies(bNum) async {
-    try {
-      List<Reply> replies = await getReply(bNum);
-    } catch (e) {
-      print("Error fetching replies: $e");
-    }
-  }
-
+  // Future<void> getReplies(postNumber) async {
+  //   try {
+  //     _replies = await getReply(postNumber);
+  //     print("실행 완료");
+  //   } catch (e) {
+  //     print("Error fetching replies: $e");
+  //   }
+  // }
 
   @override
   void initState() {
-    getReplies(123);
     super.initState();
+    _replies = getReply(widget.postNumber);
   }
 
   @override
   Widget build(BuildContext context) {
-    FunctionsReply functionsReply = Provider.of<FunctionsReply>(context, listen:true);
-    
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -64,27 +62,39 @@ class _ReplyWidgetState extends State<ReplyWidget> {
               border: Border.all(color: Colors.grey),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: ListView.builder(
-                itemCount: _replies?.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: Column(
-                      children: [
-                        OriginalReply(
-                          replySample: ,
-                          index: index,
-                        ),
-                        ReReply(
-                          replySample: ,
-                          index: index,
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
+                padding: const EdgeInsets.all(12),
+                child: FutureBuilder(
+                  future: _replies,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator(); // 로딩 중에는 로딩 인디케이터 표시
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}'); // 에러 메시지 표시
+                    } else if (!snapshot.hasData) {
+                      return const Text('No data available'); // 데이터가 없는 경우 메시지 표시
+                    } else {
+                      return ListView.builder(
+                        itemCount: snapshot.data!.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: Column(
+                              children: [
+                                OriginalReply(
+                                  replies: snapshot.data as List<Reply>,
+                                  index: index,
+                                ),
+                                // ReReply(
+                                // replies: _replies,
+                                // index: index,
+                                // ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
+                )),
           )
         ],
       ),
@@ -92,36 +102,36 @@ class _ReplyWidgetState extends State<ReplyWidget> {
   }
 }
 
-class ReReply extends StatelessWidget {
-  ReReply({super.key, required List<Map<String, dynamic>> replySample, required this.index}) : _replySample = replySample;
-
-  final List<Map<String, dynamic>> _replySample;
-  int index;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Colors.black),
-        ),
-      ),
-      padding: const EdgeInsets.only(left: 16),
-      child: ListTile(
-        leading: Text(
-          _replySample[index]['id'] as String,
-        ),
-        title: Text(
-          _replySample[index]['content'] as String,
-        ),
-      ),
-    );
-  }
-}
+// class ReReply extends StatelessWidget {
+// ReReply({super.key, required List<Reply> replies, required this.index});
+//
+// final List<Reply> _replies;
+// int index;
+// @override
+// Widget build(BuildContext context) {
+// return Container(
+// decoration: const BoxDecoration(
+// border: Border(
+// bottom: BorderSide(color: Colors.black),
+// ),
+// ),
+// padding: const EdgeInsets.only(left: 16),
+// child: ListTile(
+// leading: Text(
+// _replies[index]['rNickName'] as String,
+// ),
+// title: Text(
+// _replies[index]['rContent'] as String,
+// ),
+// ),
+// );
+// }
+// }
 
 class OriginalReply extends StatelessWidget {
-  OriginalReply({super.key, required List<Map<String, dynamic>> replySample, required this.index}) : _replySample = replySample;
+  OriginalReply({super.key, required List<Reply> replies, required this.index}) : _replies = replies;
 
-  final List<Map<String, dynamic>> _replySample;
+  final List<Reply> _replies;
   int index;
   @override
   Widget build(BuildContext context) {
@@ -133,10 +143,10 @@ class OriginalReply extends StatelessWidget {
       ),
       child: ListTile(
         leading: Text(
-          _replySample[index]['id'] as String,
+          "${_replies[index].rNickName} :",
         ),
         title: Text(
-          _replySample[index]['content'] as String,
+          _replies[index].rContent,
         ),
       ),
     );
