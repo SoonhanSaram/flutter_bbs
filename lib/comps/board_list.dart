@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bbs/comps/post_detail.dart';
+import 'package:flutter_bbs/model/models_reply.dart';
 import 'package:flutter_bbs/provider/functions_basic.dart';
 import 'package:flutter_bbs/provider/functions_post.dart';
 import 'package:flutter_bbs/provider/functions_reply.dart';
@@ -75,9 +76,10 @@ class _BoardListState extends State<BoardList> {
               elevation: 5,
               margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
               child: PostTiles(
-                getPost: () {
-                  functionsReply.getReply(posts[index]['b_num']);
+                getPost: () async {
                   functionsPost.getPost(posts[index]['b_num'], context);
+                  List<Reply> replies = await functionsReply.getReply(posts[index]['b_num']);
+                  print(replies[0]);
                 },
                 views: posts[index]['b_views'] ?? "",
                 title: posts[index]['b_title'] ?? "",

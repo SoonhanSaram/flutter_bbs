@@ -1,19 +1,55 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bbs/model/models_reply.dart';
+import 'package:flutter_bbs/provider/functions_post.dart';
+import 'package:flutter_bbs/provider/functions_reply.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+class ReplyWidget extends StatefulWidget {
+   const ReplyWidget({super.key});
+  
 
-class ReplyWidget extends StatelessWidget {
-  ReplyWidget({super.key});
 
-  final List<Map<String, dynamic>> _replySample = [
-    {"id": "해피투게더", "content": "오늘은 좋은날", "num": 1, "depth": 1},
-    {"id": "유재석", "content": "안녕하세요?", "num": 2, "depth": 1},
-    {"id": "김원희", "content": "반갑습니다.", "num": 3, "depth": 1},
-    {"id": "해피투게더", "content": "오늘은 좋은날", "num": 4, "depth": 2},
-    {"id": "유재석", "content": "안녕하세요?", "num": 5, "depth": 2},
-    {"id": "김원희", "content": "반갑습니다.", "num": 6, "depth": 2},
-  ];
+  @override
+  State<ReplyWidget> createState() => _ReplyWidgetState();
+}
+
+class _ReplyWidgetState extends State<ReplyWidget> {
+  List<Reply>? _replies;
+
+  Future<List<Reply>> getReply(bNum) async {
+    final response = await http.get(
+        Uri.parse(
+          "http://192.168.0.5:3001/reply/",
+        ),
+        headers: {
+          'Contents-Type': "Application/json",
+          "b_num": bNum,
+        });
+    final List<dynamic> result = jsonDecode(response.body);
+    return result.map((json) => Reply.fromJson(json)).toList();
+  }
+
+  void getReplies(bNum) async {
+    try {
+      List<Reply> replies = await getReply(bNum);
+    } catch (e) {
+      print("Error fetching replies: $e");
+    }
+  }
+
+
+  @override
+  void initState() {
+    getReplies(123);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    FunctionsReply functionsReply = Provider.of<FunctionsReply>(context, listen:true);
+    
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -30,17 +66,17 @@ class ReplyWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: ListView.builder(
-                itemCount: _replySample.length,
+                itemCount: _replies?.length,
                 itemBuilder: (context, index) {
                   return Card(
                     child: Column(
                       children: [
                         OriginalReply(
-                          replySample: _replySample,
+                          replySample: ,
                           index: index,
                         ),
                         ReReply(
-                          replySample: _replySample,
+                          replySample: ,
                           index: index,
                         ),
                       ],

@@ -37,16 +37,16 @@ class FunctionsUser extends ChangeNotifier {
   }
 
   void chekRegExpression(String type, String value) {
-    _emailValidation = false;
-    _passwrdValidation = false;
-    _nickNameValidation = false;
     if (type == "email") {
+      _emailValidation = false;
       String pattern = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]*@[a-zA-Z0-9]*.[a-zA-Z]{2,3}$";
       _emailValidation = RegExp(pattern).hasMatch(value);
     } else if (type == "password") {
+      _passwrdValidation = false;
       String pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,20}$";
       _passwrdValidation = RegExp(pattern).hasMatch(value);
     } else if (type == "nickname") {
+      _nickNameValidation = false;
       String pattern = r"^[a-zA-Z0-9가-힣]{2,12}$";
       _nickNameValidation = RegExp(pattern).hasMatch(value);
     }

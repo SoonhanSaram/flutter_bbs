@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bbs/model/models_reply.dart';
 import 'package:http/http.dart' as http;
 
 class FunctionsReply extends ChangeNotifier {
@@ -21,20 +22,29 @@ class FunctionsReply extends ChangeNotifier {
     );
   }
 
-  Future<void> getReply(bNum) async {
+  Future<List<Reply>> getReply(bNum) async {
+    print(bNum);
     final response = await http.get(
-        Uri.parse(
-          "http://192.168.0.5:3001/reply/",
-        ),
-        headers: {
-          'Contents-Type': "Application/json",
-          "b_num": bNum,
-        });
-    final result = jsonDecode(response.body);
-    print(result);
+      Uri.parse(
+        "http://192.168.0.5:3001/getReply",
+      ),
+      headers: {
+        'Contents-Type': "Application/json",
+        "postNum": bNum.toString(),
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> result = jsonDecode(response.body);
+      List<Reply> replies = result.map((json) => Reply.fromJson(json)).toList();
+      return replies;
+    } else {
+      throw Exception("Failed to load replies");
+    }
   }
 
   Future<void> postReply(token, context) async {
+    print(textEditingController.text);
     if (token != null) {
       final response = await http.post(
         Uri.parse("http://192.168.0.5:3001/reply/insert"),
@@ -44,6 +54,7 @@ class FunctionsReply extends ChangeNotifier {
         },
         body: {
           "content": textEditingController.text,
+          "postNum": "2",
         },
       );
       final result = jsonDecode(response.body);

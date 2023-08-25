@@ -46,7 +46,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/join', async (req, res) => {
     const { email, nickName, password, major } = req.body
-
+    console.log(email, nickName, password);
     // password 암호화 
     let hashAlgorithm = crypto.createHash('sha512') // sha512 암호 알고리즘
     let hashing = hashAlgorithm.update(password);

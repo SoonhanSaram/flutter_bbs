@@ -127,7 +127,10 @@ class JoinPage extends StatelessWidget {
               ),
               VariousButton(
                 buttonTitle: "회원가입 완료",
-                function: () => functionsUser.joinUser(context),
+                function: () => {
+                  print("회원가입 실행"),
+                  functionsUser.joinUser(context),
+                },
               )
             ],
           ),

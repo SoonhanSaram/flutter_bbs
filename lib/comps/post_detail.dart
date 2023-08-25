@@ -3,7 +3,6 @@ import 'package:flutter_bbs/provider/functions_post.dart';
 import 'package:flutter_bbs/provider/functions_reply.dart';
 import 'package:flutter_bbs/provider/functions_user.dart';
 import 'package:flutter_bbs/widgets/custom_textfield.dart';
-import 'package:flutter_bbs/widgets/reply.dart';
 import 'package:flutter_bbs/widgets/title_card.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +35,7 @@ class PostDetail extends StatelessWidget {
                   functionsReply.postReply(token, context);
                 },
               ),
-              ReplyWidget(),
+              // ReplyWidget(),
               _buildDate(sdate),
             ],
           ),
