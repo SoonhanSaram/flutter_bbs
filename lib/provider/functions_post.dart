@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bbs/comps/post_detail.dart';
+import 'package:flutter_bbs/transitions/router_transition.dart';
 import 'package:http/http.dart' as http;
 
 class FunctionsPost extends ChangeNotifier {
@@ -20,9 +22,10 @@ class FunctionsPost extends ChangeNotifier {
         "views": postData['b_views'] ?? "",
       });
       if (_currentPost.isNotEmpty) {
-        Navigator.pushNamed(
-          context,
-          '/postDetail',
+        Navigator.of(context).push(
+          RouterTransition(
+            const PostDetail(),
+          ),
         );
       }
     } catch (e) {}

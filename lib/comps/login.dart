@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bbs/comps/join.dart';
 import 'package:flutter_bbs/provider/functions_user.dart';
 import 'package:flutter_bbs/widgets/button.dart';
+import 'package:flutter_bbs/widgets/custom_textfield.dart';
+import 'package:flutter_bbs/widgets/title_card.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
@@ -12,39 +13,44 @@ class LoginPage extends StatelessWidget {
     FunctionsUser functionsUser = Provider.of<FunctionsUser>(context, listen: true);
     return SafeArea(
       child: Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const Text("아이디"),
-            ContainerTextField(
-              child: TextField(
-                onChanged: (value) {
-                  functionsUser.chekRegExpression("email", value);
-                },
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                ),
-                controller: functionsUser.loginIdController,
+        appBar: AppBar(
+          title: const Text("로그인 페이지"),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 150,
               ),
-            ),
-            const Text("비밀번호"),
-            ContainerTextField(
-              child: TextField(
+              titleCard(title: "아이디"),
+              CustomTextfield(
+                onChangedFunction: () {},
+                leadingIcon: Icons.account_circle_outlined,
+                surfixIcon: Icons.alternate_email_outlined,
+                onTapFunction: () {},
+                textEditingController: functionsUser.loginIdController,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              titleCard(title: "비밀번호"),
+              CustomTextfield(
+                leadingIcon: Icons.password_outlined,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                ),
-                onChanged: (value) {
-                  functionsUser.chekRegExpression("password", functionsUser.passwrdController.text);
-                },
-                controller: functionsUser.loginPasswrdController,
+                onChangedFunction: () {},
+                onTapFunction: () {},
+                textEditingController: functionsUser.loginPasswrdController,
               ),
-            ),
-            VariousButton(
-              buttonTitle: "로그인",
-              function: () => functionsUser.loginUser(context),
-            )
-          ],
+              const SizedBox(
+                height: 20,
+              ),
+              VariousButton(
+                buttonTitle: "로그인",
+                function: () => functionsUser.loginUser(context),
+              ),
+            ],
+          ),
         ),
       ),
     );

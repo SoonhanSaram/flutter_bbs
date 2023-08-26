@@ -1,8 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bbs/comps/login.dart';
 import 'package:flutter_bbs/model/models_reply.dart';
+import 'package:flutter_bbs/provider/functions_user.dart';
+import 'package:flutter_bbs/widgets/custom_popup.dart';
+import 'package:flutter_bbs/widgets/custom_snackbar.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class ReplyWidget extends StatefulWidget {
   ReplyWidget({
@@ -48,56 +53,56 @@ class _ReplyWidgetState extends State<ReplyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text("댓글영역"),
-          Container(
-            width: double.maxFinite,
-            height: 500,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.grey),
-            ),
-            child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: FutureBuilder(
-                  future: _replies,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator(); // 로딩 중에는 로딩 인디케이터 표시
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}'); // 에러 메시지 표시
-                    } else if (!snapshot.hasData) {
-                      return const Text('No data available'); // 데이터가 없는 경우 메시지 표시
-                    } else {
-                      return ListView.builder(
-                        itemCount: snapshot.data!.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            child: Column(
-                              children: [
-                                OriginalReply(
-                                  replies: snapshot.data as List<Reply>,
-                                  index: index,
-                                ),
-                                // ReReply(
-                                // replies: _replies,
-                                // index: index,
-                                // ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    }
-                  },
-                )),
-          )
-        ],
-      ),
+    FunctionsUser functionsUser = Provider.of<FunctionsUser>(context, listen: true);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Text("댓글영역"),
+        Container(
+          width: double.maxFinite,
+          height: 500,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.grey),
+          ),
+          child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+              child: FutureBuilder(
+                future: _replies,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator(); // 로딩 중에는 로딩 인디케이터 표시
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}'); // 에러 메시지 표시
+                  } else if (!snapshot.hasData) {
+                    return const Text('No data available'); // 데이터가 없는 경우 메시지 표시
+                  } else {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: Column(
+                            children: [
+                              OriginalReply(
+                                token: functionsUser.token ?? "",
+                                replies: snapshot.data as List<Reply>,
+                                index: index,
+                              ),
+                              // ReReply(
+                              // replies: _replies,
+                              // index: index,
+                              // ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              )),
+        )
+      ],
     );
   }
 }
@@ -129,19 +134,57 @@ class _ReplyWidgetState extends State<ReplyWidget> {
 // }
 
 class OriginalReply extends StatelessWidget {
-  OriginalReply({super.key, required List<Reply> replies, required this.index}) : _replies = replies;
+  OriginalReply({super.key, required List<Reply> replies, required this.index, this.token = ""}) : _replies = replies;
 
   final List<Reply> _replies;
   int index;
+  String token;
+  Future<void> deleteReply(token, context, replyNumber) async {
+    if (token == "") {
+      customShowPopup(
+        context,
+        "댓글 삭제 오류",
+        "로그인 정보가 없습니다.",
+        "취소",
+        "로그인 하러 가기",
+        const LoginPage(),
+      );
+    } else {
+      final response = await http.delete(
+        Uri.parse("http://192.168.0.5:3001/reply/delete"),
+        headers: {
+          "Contents-Type": "Application/json",
+          "Access-Token": token,
+          "replyNumber": replyNumber.toString(),
+        },
+      );
+      final result = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        callSnackBar(context, result['결과']);
+        Navigator.pushNamedAndRemoveUntil(context, '/postDetail', (route) => route.isFirst || route.settings.name == '/postDetail');
+      } else if (response.statusCode == 401) {
+        callSnackBar(context, result['결과']);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Colors.black),
-        ),
-      ),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: Colors.grey,
+            width: 1,
+          )),
       child: ListTile(
+        trailing: GestureDetector(
+          onTap: () {
+            deleteReply(token, context, _replies[index].rNum);
+          },
+          child: const Icon(Icons.delete_outline_outlined),
+        ),
         leading: Text(
           "${_replies[index].rNickName} :",
         ),

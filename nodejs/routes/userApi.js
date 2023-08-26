@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post('/login', async (req, res) => {
     const { email, password } = req.body
-
+    console.log(email, password);
     // password 암호화 
     let hashAlgorithm = crypto.createHash('sha512') // sha512 암호 알고리즘
     let hashing = hashAlgorithm.update(password);

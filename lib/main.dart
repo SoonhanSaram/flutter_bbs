@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bbs/color_schemes.g.dart';
-import 'package:flutter_bbs/comps/board_list.dart';
+import 'package:flutter_bbs/comps/post_list.dart';
 import 'package:flutter_bbs/comps/index.dart';
 import 'package:flutter_bbs/comps/join.dart';
 import 'package:flutter_bbs/comps/login.dart';
 import 'package:flutter_bbs/comps/post_detail.dart';
-import 'package:flutter_bbs/comps/write_post.dart';
+import 'package:flutter_bbs/comps/post_write_page.dart';
 import 'package:flutter_bbs/provider/functions_basic.dart';
 import 'package:flutter_bbs/provider/functions_post.dart';
 import 'package:flutter_bbs/provider/functions_reply.dart';
@@ -68,8 +68,8 @@ class FlutterBbs extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (context) => const Index(),
-          '/board': (context) => const BoardList(),
-          '/writePost': (context) => const WritingPost(),
+          '/board': (context) => const PostList(),
+          '/writePost': (context) => const PostWritePage(),
           '/postDetail': (context) => const PostDetail(),
           '/join': (context) => const JoinPage(),
           '/login': (context) => const LoginPage(),

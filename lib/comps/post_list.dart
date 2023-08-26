@@ -8,14 +8,14 @@ import 'package:flutter_bbs/widgets/post_tiles.dart';
 import 'package:flutter_bbs/widgets/title_card.dart';
 import 'package:provider/provider.dart';
 
-class BoardList extends StatefulWidget {
-  const BoardList({super.key});
+class PostList extends StatefulWidget {
+  const PostList({super.key});
 
   @override
-  State<BoardList> createState() => _BoardListState();
+  State<PostList> createState() => _PostListState();
 }
 
-class _BoardListState extends State<BoardList> {
+class _PostListState extends State<PostList> {
   final ContainerTransitionType _transitionType = ContainerTransitionType.fadeThrough;
 
   void _showMarkedAsDoneSnackbar(bool? isMarkedAsDone) {
@@ -77,7 +77,7 @@ class _BoardListState extends State<BoardList> {
               child: PostTiles(
                 getPost: () async {
                   functionsPost.getPost(posts[index]['b_num'], context);
-                  functionsReply.savePostNumber(posts[index]['b_num']);
+                  await functionsReply.savePostNumber(posts[index]['b_num']);
                 },
                 views: posts[index]['b_views'] ?? "",
                 title: posts[index]['b_title'] ?? "",

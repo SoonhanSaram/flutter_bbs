@@ -30,6 +30,7 @@ class PostDetail extends StatelessWidget {
               SizedBox(height: _getHeight(context, 0.02)),
               _buildContent(context, postData['content'] ?? ""),
               CustomTextfield(
+                onChangedFunction: () {},
                 textEditingController: functionsReply.textEditingController,
                 hintText: "댓글을 입력해주세요",
                 onTapFunction: () {
@@ -77,10 +78,17 @@ class PostDetail extends StatelessWidget {
       height: _getHeight(context, 0.8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        border: Border.all(width: 1, color: Colors.black),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(width: 1, color: Colors.grey),
       ),
       child: SingleChildScrollView(
-        child: Text(content),
+        child: Text(
+          content,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
       ),
     );
   }

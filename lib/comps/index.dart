@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bbs/comps/board_list.dart';
 import 'package:flutter_bbs/comps/main_list.dart';
+import 'package:flutter_bbs/comps/post_list.dart';
 import 'package:flutter_bbs/provider/functions_basic.dart';
 import 'package:flutter_bbs/provider/functions_user.dart';
 import 'package:flutter_bbs/widgets/button.dart';
@@ -105,7 +105,7 @@ class _OpenContainerWrapper extends StatelessWidget {
     return OpenContainer<bool>(
       transitionType: transitionType,
       openBuilder: (BuildContext context, VoidCallback _) {
-        return const BoardList();
+        return const PostList();
       },
       onClosed: onClosed,
       tappable: false,

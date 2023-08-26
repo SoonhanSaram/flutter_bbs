@@ -5,14 +5,14 @@ import 'package:flutter_bbs/provider/functions_writing.dart';
 import 'package:flutter_bbs/widgets/button.dart';
 import 'package:provider/provider.dart';
 
-class WritingPost extends StatefulWidget {
-  const WritingPost({super.key});
+class PostWritePage extends StatefulWidget {
+  const PostWritePage({super.key});
 
   @override
-  State<WritingPost> createState() => _WritingPostState();
+  State<PostWritePage> createState() => _PostWritePageState();
 }
 
-class _WritingPostState extends State<WritingPost> {
+class _PostWritePageState extends State<PostWritePage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
   int _contentLength = 0;

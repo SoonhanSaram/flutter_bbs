@@ -1,30 +1,20 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bbs/comps/login.dart';
 import 'package:flutter_bbs/model/models_reply.dart';
+import 'package:flutter_bbs/widgets/custom_popup.dart';
+import 'package:flutter_bbs/widgets/custom_snackbar.dart';
 import 'package:http/http.dart' as http;
 
 class FunctionsReply extends ChangeNotifier {
   TextEditingController textEditingController = TextEditingController();
   int _postNumber = 0;
   int get postNumber => _postNumber;
-  void callSnackBar(context, String title) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Colors.black,
-        content: Text(
-          title,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          ),
-        ),
-      ),
-    );
-  }
 
-  void savePostNumber(postNum) {
-    _postNumber = postNum;
+  Future<void> savePostNumber(postNum) async {
+    _postNumber = await postNum;
+    print(_postNumber);
     notifyListeners();
   }
 
@@ -60,16 +50,28 @@ class FunctionsReply extends ChangeNotifier {
         },
         body: {
           "content": textEditingController.text,
-          "postNum": "2",
+          "postNum": _postNumber.toString(),
         },
       );
       final result = jsonDecode(response.body);
       if (result['결과'] == "성공") {
         textEditingController.clear();
-        notifyListeners();
+        Navigator.pushNamedAndRemoveUntil(context, '/postDetail', (route) => route.isFirst || route.settings.name == '/postDetail');
       } else {
-        callSnackBar(context, "댓글 등록에 실패했습니다.");
+        callSnackBar(
+          context,
+          result['결과'],
+        );
       }
+    } else if (token == null) {
+      customShowPopup(
+        context,
+        "댓글 입력 오류",
+        "로그인 정보가 없습니다.",
+        "취소",
+        "로그인 하러 가기",
+        const LoginPage(),
+      );
     }
   }
 }

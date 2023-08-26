@@ -9,9 +9,12 @@ class CustomTextfield extends StatelessWidget {
     this.hintText = "",
     this.leadingIcon = Icons.search,
     this.surfixIcon = Icons.send,
+    this.obscureText = false,
+    required this.onChangedFunction,
     required this.onTapFunction,
     required this.textEditingController,
   });
+  bool obscureText;
   double margin;
   double padding;
   double borderRadius;
@@ -19,7 +22,9 @@ class CustomTextfield extends StatelessWidget {
   IconData leadingIcon;
   IconData surfixIcon;
   Function onTapFunction;
+  Function onChangedFunction;
   TextEditingController textEditingController;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,6 +37,8 @@ class CustomTextfield extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(left: padding),
         child: TextField(
+          obscureText: obscureText,
+          onChanged: onChangedFunction(),
           controller: textEditingController,
           decoration: InputDecoration(
             border: InputBorder.none,
