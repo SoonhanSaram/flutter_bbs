@@ -24,16 +24,16 @@ export default (sequelize) => {
             type: Sequelize.DataTypes.INTEGER,
             allowNull: false,
         },
-        b_sdate: {
+        r_sdate: {
             type: Sequelize.DataTypes.DATE,
             allowNull: true,
             defaultValue: Sequelize.NOW
         },
-        b_udate: {
+        r_udate: {
             type: Sequelize.DataTypes.DATE,
             allowNull: true,
         },
-        b_ddate: {
+        r_ddate: {
             type: Sequelize.DataTypes.DATE,
             allowNull: true
         },

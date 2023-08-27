@@ -65,4 +65,42 @@ router.delete('/delete', async (req, res) => {
     }
 })
 
+router.patch('/patch', async (req, res) => {
+    console.log("패치 실행")
+    const token = req.header('Access-Token')
+    const content = req.body.content
+    let replyNum = req.header('replynumber')
+
+
+    replyNum = Number(replyNum);
+    // console.log(req.headers);
+    let nickName = "";
+    jwt.verify(token, configSecret, (error, decoded) => {
+        if (error) {
+            console.log(`에러 ${error}`)
+        }
+        nickName = decoded.u_nickname
+    })
+
+    if (token) {
+        try {
+            const getReply = await reply.findOne({ where: { r_num: replyNum } })
+            // console.log(getReply.r_nickName);
+
+            if (getReply.r_nickName == nickName) {
+                const currentDate = new Date()
+                console.log("아이다가 일치 합니다.")
+                await reply.update({ r_content: content, r_udate: currentDate }, { where: { r_num: replyNum } })
+                const result = await reply.findAll();
+                res.status(200).json({ "결과": "댓글이 수정 되었습니다.", "댓글": result })
+            } else {
+                console.log("아이다가 일치하지 않습니다.")
+                res.status(401).json({ "결과": "댓글을 삭제할 권한이 없습니다." })
+            }
+        } catch (error) {
+
+        }
+    }
+})
+
 export default router;

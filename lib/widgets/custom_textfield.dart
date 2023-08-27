@@ -10,10 +10,12 @@ class CustomTextfield extends StatelessWidget {
     this.leadingIcon = Icons.search,
     this.surfixIcon = Icons.send,
     this.obscureText = false,
+    this.boolSuffixIcon = true,
     required this.onChangedFunction,
     required this.onTapFunction,
     required this.textEditingController,
   });
+  bool boolSuffixIcon;
   bool obscureText;
   double margin;
   double padding;
@@ -48,14 +50,16 @@ class CustomTextfield extends StatelessWidget {
               color: Colors.amberAccent,
               fontSize: 12,
             ),
-            suffixIcon: GestureDetector(
-              onTap: () {
-                onTapFunction();
-              },
-              child: Icon(
-                surfixIcon,
-              ),
-            ),
+            suffixIcon: boolSuffixIcon == true
+                ? GestureDetector(
+                    onTap: () {
+                      onTapFunction();
+                    },
+                    child: Icon(
+                      surfixIcon,
+                    ),
+                  )
+                : null,
           ),
         ),
       ),
