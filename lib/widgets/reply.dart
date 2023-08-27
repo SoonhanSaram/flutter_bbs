@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bbs/comps/login.dart';
 import 'package:flutter_bbs/model/models_reply.dart';
+import 'package:flutter_bbs/provider/functions_reply.dart';
 import 'package:flutter_bbs/provider/functions_user.dart';
 import 'package:flutter_bbs/widgets/custom_popup.dart';
 import 'package:flutter_bbs/widgets/custom_snackbar.dart';
-import 'package:flutter_bbs/widgets/custom_textfield.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
@@ -59,49 +59,41 @@ class _ReplyWidgetState extends State<ReplyWidget> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Text("댓글영역"),
         Container(
+          height: 300,
           width: double.maxFinite,
-          height: 500,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: Colors.grey),
           ),
           child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
-              child: FutureBuilder(
-                future: _replies,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator(); // 로딩 중에는 로딩 인디케이터 표시
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}'); // 에러 메시지 표시
-                  } else if (!snapshot.hasData) {
-                    return const Text('No data available'); // 데이터가 없는 경우 메시지 표시
-                  } else {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length ?? 0,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          child: Column(
-                            children: [
-                              OriginalReply(
-                                token: functionsUser.token ?? "",
-                                replies: snapshot.data as List<Reply>,
-                                index: index,
-                              ),
-                              // ReReply(
-                              // replies: _replies,
-                              // index: index,
-                              // ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  }
-                },
-              )),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+            child: FutureBuilder(
+              future: _replies,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator(); // 로딩 중에는 로딩 인디케이터 표시
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}'); // 에러 메시지 표시
+                } else if (!snapshot.hasData) {
+                  return const Text('댓글 수 : 0'); // 데이터가 없는 경우 메시지 표시
+                } else {
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length ?? 0,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        child: OriginalReply(
+                          token: functionsUser.token ?? "",
+                          replies: snapshot.data as List<Reply>,
+                          index: index,
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+            ),
+          ),
         )
       ],
     );
@@ -167,66 +159,13 @@ class OriginalReply extends StatelessWidget {
       } else if (response.statusCode == 401) {
         callSnackBar(context, result['결과']);
       }
-    }
-  }
-
-  Future<void> modifyReply(token, context, replyNumber) async {
-    print("댓글 수정 함수 실행");
-    TextEditingController replyTextEditingController = TextEditingController();
-    if (token.isEmpty) {
-      callSnackBar(context, "로그인 정보가 없습니다.");
-    } else {
-      print("댓글 수정 함수 실행1");
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text("댓글 수정"),
-            content: CustomTextfield(
-              leadingIcon: Icons.edit,
-              boolSuffixIcon: false,
-              onChangedFunction: () {},
-              onTapFunction: () {},
-              textEditingController: replyTextEditingController,
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("취소"),
-              ),
-              TextButton(
-                onPressed: () async {
-                  final response = await http.patch(
-                    Uri.parse("http://192.168.0.5:3001/reply/patch"),
-                    headers: {
-                      "Contents-Type": "Application/json",
-                      "Access-Token": token,
-                      "replyNumber": replyNumber.toString(),
-                    },
-                    body: {'content': replyTextEditingController.text},
-                  );
-                  final result = jsonDecode(response.body);
-                  if (response.statusCode == 200) {
-                    callSnackBar(context, result['결과']);
-                    Navigator.pushNamedAndRemoveUntil(context, '/postDetail', (route) => route.isFirst || route.settings.name == '/postDetail');
-                  } else if (response.statusCode == 401) {
-                    callSnackBar(context, result['결과']);
-                  }
-                  result['댓글'].map((json) => Reply.fromJson(json)).toList();
-                },
-                child: const Text("수정"),
-              )
-            ],
-          );
-        },
-      );
+      result['댓글'].map((json) => Reply.fromJson(json)).toList();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    FunctionsReply functionsReply = Provider.of<FunctionsReply>(context, listen: true);
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -235,33 +174,35 @@ class OriginalReply extends StatelessWidget {
             width: 1,
           )),
       child: ListTile(
-        trailing: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  deleteReply(token, context, _replies[index].rNum);
-                },
-                child: const Icon(Icons.delete_outline_outlined),
-              ),
-              const Text(" | "),
-              GestureDetector(
-                onTap: () {
-                  modifyReply(token, context, _replies[index].rNum);
-                },
-                child: const Icon(Icons.edit_note_outlined),
-              ),
-            ],
-          ),
-        ),
+        trailing: _replies[index].rDDate == null
+            ? Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        deleteReply(token, context, _replies[index].rNum);
+                      },
+                      child: const Icon(Icons.delete_outline_outlined),
+                    ),
+                    const Text(" | "),
+                    GestureDetector(
+                      onTap: () {
+                        functionsReply.modifyReply(token, context, _replies[index].rNum);
+                      },
+                      child: const Icon(Icons.edit_note_outlined),
+                    ),
+                  ],
+                ),
+              )
+            : null,
         leading: Text(
           "${_replies[index].rNickName} :",
         ),
         title: Text(
-          _replies[index].rUDate == null
+          _replies[index].rUDate == null && _replies[index].rDDate == null
               ? _replies[index].rContent
               : _replies[index].rDDate == null
                   ? "[댓글수정] ${_replies[index].rContent}"

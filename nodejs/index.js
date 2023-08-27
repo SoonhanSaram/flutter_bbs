@@ -3,7 +3,7 @@ import path from "path";
 import morgan from "morgan";
 import db from "./models/index.js"
 
-import ApiRouter from "./routes/bbsApi.js"
+import bbsApiRouter from "./routes/bbsApi.js"
 import UserApiRouter from "./routes/userApi.js"
 import replyApiRouter from './routes/replyApi.js'
 
@@ -28,10 +28,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join("public")));
 
 app.use('/reply', authMiddleware)
-
+app.use('/insertPosting', authMiddleware)
 
 // router module 연결
-app.use('/', ApiRouter);
+app.use('/', bbsApiRouter);
 app.use('/user', UserApiRouter);
 app.use('/reply', replyApiRouter);
 

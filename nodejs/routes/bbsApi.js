@@ -1,6 +1,7 @@
 import express from 'express';
 import db from '../models/index.js'
-
+import jwt from 'jsonwebtoken'
+import { secret as configSecret } from '../config/config.js'
 const bbsList = db.models.boardList
 const board = db.models.board
 const reply = db.models.reply;
@@ -44,9 +45,18 @@ router.get("/board/:name", async (req, res) => {
 
 router.post("/insertPosting", async (req, res) => {
     // console.log(req.body);
+    const token = req.header('Access-Token');
+    let nickname = "";
+    jwt.verify(token, configSecret, (error, decoded) => {
+        if (error) {
+            console.log(`에러 ${error}`)
+        }
+        // console.log(decoded);
+        nickname = decoded.u_nickname
+    })
 
     if (req.body.board != null && req.body.title != null && req.body.content != null) {
-        const result = await board.create({ b_title: req.body.title, b_text: req.body.content, b_category: req.body.board, b_nickname: req.body.nickname },)
+        const result = await board.create({ b_title: req.body.title, b_text: req.body.content, b_category: req.body.board, b_nickname: nickname },)
         console.log(result);
     }
 

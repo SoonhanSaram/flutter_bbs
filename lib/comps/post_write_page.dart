@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bbs/provider/functions_user.dart';
 import 'package:flutter_bbs/widgets/drop_down_button.dart';
 import 'package:flutter_bbs/provider/functions_basic.dart';
 import 'package:flutter_bbs/provider/functions_writing.dart';
@@ -20,6 +21,7 @@ class _PostWritePageState extends State<PostWritePage> {
   Widget build(BuildContext context) {
     FunctionsWriting functionsWriting = Provider.of<FunctionsWriting>(context, listen: false);
     String currentBoard = context.read<FunctionsBasic>().currentBoard;
+    FunctionsUser functionsUser = Provider.of<FunctionsUser>(context, listen: false);
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -110,11 +112,12 @@ class _PostWritePageState extends State<PostWritePage> {
                     if (_titleController.text.isEmpty || _contentController.text.isEmpty) {
                       functionsWriting.callSnackBar(context, "제목과 내용을 입력해주세요");
                     } else if (_titleController.text.length <= 40 || _contentController.text.length <= 600) {
-                      functionsWriting.callPosting(
+                      functionsWriting.postingBoard(
                         context,
                         _titleController.text,
                         _contentController.text,
                         currentBoard,
+                        functionsUser.token,
                       );
                       _titleController.text = "";
                       _contentController.text = "";

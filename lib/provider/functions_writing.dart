@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:math' as Math;
 
 class FunctionsWriting extends ChangeNotifier {
   String _boardName = "";
@@ -29,9 +28,7 @@ class FunctionsWriting extends ChangeNotifier {
     );
   }
 
-  Future<void> callPosting(BuildContext context, title, content, String? currentBoard) async {
-    List<String> nickNames = ["행복한 사람 1", "행복한 사람 2", "행복한 사람 3", "행복한 사람 4", "행복한 사람 5"];
-    int rndNum = Math.Random().nextInt(nickNames.length);
+  Future<void> postingBoard(BuildContext context, title, content, String? currentBoard, token) async {
     if (title == "") {
       callSnackBar(context, "제목을 입력해주세요");
     } else if (content == "") {
@@ -39,12 +36,14 @@ class FunctionsWriting extends ChangeNotifier {
     } else {
       final response = await http.post(
         Uri.parse("http://192.168.0.5:3001/insertPosting"),
-        headers: {"Contents-Type": "Application/json"},
+        headers: {
+          "Contents-Type": "Application/json",
+          "Access-Token": token,
+        },
         body: {
           "board": _boardName == "" ? currentBoard : _boardName,
           "title": title,
           "content": content,
-          "nickname": nickNames[rndNum],
         },
       );
       _boardName = "";
