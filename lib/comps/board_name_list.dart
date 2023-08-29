@@ -6,14 +6,14 @@ import 'package:flutter_bbs/provider/functions_basic.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
-class MainList extends StatefulWidget {
-  const MainList({super.key});
+class BoardNameList extends StatefulWidget {
+  const BoardNameList({super.key});
 
   @override
-  State<MainList> createState() => _MainListState();
+  State<BoardNameList> createState() => _BoardNameListState();
 }
 
-class _MainListState extends State<MainList> {
+class _BoardNameListState extends State<BoardNameList> {
   List<String> boardNames = [];
 // initState 에서 비동기 함수를 쓸 수 없다. 그래서 아래 함수가 다 실행되기 전에 화면이
 // init 되는 현상을 겪음

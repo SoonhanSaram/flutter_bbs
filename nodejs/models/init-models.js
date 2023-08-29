@@ -9,6 +9,10 @@ function initModels(sequelize) {
   const user = _user(sequelize);
   const reply = _reply(sequelize);
   const reReply = _reReply(sequelize);
+
+  reply.belongsTo(board, { as: 'board_reply', foreingKey: 'rb_num', onDelete: 'cascade' })
+  board.hasMany(reply, { as: 'replies', foreingKey: 'b_num', onDelete: 'cascade' })
+
   return {
     board,
     boardList,

@@ -21,7 +21,7 @@ router.post('/insert', async (req, res) => {
 
     if (token) {
         try {
-            const result = await reply.create({ r_content: content, r_nickName: nickname, rb_num: postNum },)
+            result = await reply.create({ r_content: content, r_nickName: nickname, rb_num: postNum },)
             console.log(result);
             res.status(200).json({ '결과': '성공' })
         } catch (error) {

@@ -5,7 +5,7 @@ import 'package:flutter_bbs/provider/functions_basic.dart';
 import 'package:flutter_bbs/provider/functions_post.dart';
 import 'package:flutter_bbs/provider/functions_reply.dart';
 import 'package:flutter_bbs/widgets/post_tiles.dart';
-import 'package:flutter_bbs/widgets/title_card.dart';
+import 'package:flutter_bbs/widgets/custom_title_card.dart';
 import 'package:provider/provider.dart';
 
 class PostList extends StatefulWidget {
@@ -27,11 +27,21 @@ class _PostListState extends State<PostList> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     String currentBoard = context.watch<FunctionsBasic>().currentBoard;
-    FunctionsBasic functionsBasic = Provider.of<FunctionsBasic>(context, listen: false);
-    FunctionsPost functionsPost = Provider.of<FunctionsPost>(context, listen: false);
-    FunctionsReply functionsReply = Provider.of<FunctionsReply>(context, listen: false);
+    FunctionsBasic functionsBasic = Provider.of<FunctionsBasic>(context, listen: true);
+    FunctionsPost functionsPost = Provider.of<FunctionsPost>(context, listen: true);
+    FunctionsReply functionsReply = Provider.of<FunctionsReply>(context, listen: true);
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -79,6 +89,7 @@ class _PostListState extends State<PostList> {
                   functionsPost.getPost(posts[index]['b_num'], context);
                   await functionsReply.savePostNumber(posts[index]['b_num']);
                 },
+                countReply: posts[index]['repliesCount'],
                 views: posts[index]['b_views'] ?? "",
                 title: posts[index]['b_title'] ?? "",
                 nickname: posts[index]['b_nickname'] ?? "",

@@ -7,13 +7,14 @@ class PostTiles extends StatelessWidget {
     required this.views,
     required this.title,
     required this.nickname,
+    required this.countReply,
   });
 
   Function getPost;
   String views;
   String title;
   String nickname;
-
+  int countReply;
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -27,7 +28,7 @@ class PostTiles extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
       ),
       title: Text(
-        title,
+        countReply == 0 ? title : "$title ($countReply)",
         overflow: TextOverflow.ellipsis,
       ),
       trailing: Text(

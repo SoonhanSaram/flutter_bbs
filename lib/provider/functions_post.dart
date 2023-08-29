@@ -9,6 +9,7 @@ class FunctionsPost extends ChangeNotifier {
   final Map<String, String> _currentPost = {};
   Map<String, String> get currentPost => _currentPost;
 
+  // 포스팅 디테일 가져오기
   Future<void> getPost(pNum, BuildContext context) async {
     _currentPost.clear();
     try {

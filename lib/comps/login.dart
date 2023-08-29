@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bbs/provider/functions_user.dart';
-import 'package:flutter_bbs/widgets/button.dart';
+import 'package:flutter_bbs/widgets/custom_button.dart';
 import 'package:flutter_bbs/widgets/custom_textfield.dart';
-import 'package:flutter_bbs/widgets/title_card.dart';
+import 'package:flutter_bbs/widgets/custom_title_card.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {

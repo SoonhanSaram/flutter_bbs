@@ -133,8 +133,10 @@ class FunctionsUser extends ChangeNotifier {
     );
 
     tokenUpdate();
+
     // controller clear
-    controllersClear();
+    loginIdController.clear();
+    loginPasswrdController.clear();
 
     Navigator.pop(context);
   }

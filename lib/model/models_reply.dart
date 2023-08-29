@@ -4,7 +4,7 @@ class Reply {
   String rNickName;
   int rDepth;
   int rbNum;
-  DateTime rSDate;
+  DateTime? rSDate;
   DateTime? rUDate;
   DateTime? rDDate;
 
@@ -27,7 +27,7 @@ class Reply {
       rNickName: json['r_nickName'],
       rDepth: json['r_depth'],
       rbNum: json['rb_num'],
-      rSDate: DateTime.parse(json['r_sdate']) ?? DateTime.now(),
+      rSDate: json['r_sdate'] != null ? DateTime.parse(json['r_sdate']) : null,
       rUDate: json['r_udate'] != null ? DateTime.parse(json['r_udate']) : null,
       rDDate: json['r_ddate'] != null ? DateTime.parse(json['r_ddate']) : null,
     );

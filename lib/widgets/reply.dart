@@ -79,7 +79,7 @@ class _ReplyWidgetState extends State<ReplyWidget> {
                   return const Text('댓글 수 : 0'); // 데이터가 없는 경우 메시지 표시
                 } else {
                   return ListView.builder(
-                    itemCount: snapshot.data!.length ?? 0,
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       return Card(
                         child: OriginalReply(

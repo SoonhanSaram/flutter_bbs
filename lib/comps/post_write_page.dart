@@ -3,7 +3,7 @@ import 'package:flutter_bbs/provider/functions_user.dart';
 import 'package:flutter_bbs/widgets/drop_down_button.dart';
 import 'package:flutter_bbs/provider/functions_basic.dart';
 import 'package:flutter_bbs/provider/functions_writing.dart';
-import 'package:flutter_bbs/widgets/button.dart';
+import 'package:flutter_bbs/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
 class PostWritePage extends StatefulWidget {

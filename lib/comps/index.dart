@@ -1,11 +1,11 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bbs/comps/main_list.dart';
+import 'package:flutter_bbs/comps/board_name_list.dart';
 import 'package:flutter_bbs/comps/post_list.dart';
 import 'package:flutter_bbs/provider/functions_basic.dart';
 import 'package:flutter_bbs/provider/functions_user.dart';
-import 'package:flutter_bbs/widgets/button.dart';
-import 'package:flutter_bbs/widgets/title_card.dart';
+import 'package:flutter_bbs/widgets/custom_button.dart';
+import 'package:flutter_bbs/widgets/custom_title_card.dart';
 import 'package:provider/provider.dart';
 
 class Index extends StatefulWidget {
@@ -50,7 +50,7 @@ class _IndexState extends State<Index> {
                 child: _OpenContainerWrapper(
                   transitionType: _transitionType,
                   closedBuilder: (BuildContext _, VoidCallback openContainer) {
-                    return const MainList();
+                    return const BoardNameList();
                   },
                   onClosed: _showMarkedAsDoneSnackbar,
                 ),

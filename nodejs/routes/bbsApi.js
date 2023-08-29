@@ -1,6 +1,7 @@
 import express from 'express';
 import db from '../models/index.js'
 import jwt from 'jsonwebtoken'
+import sequelize from 'sequelize'
 import { secret as configSecret } from '../config/config.js'
 const bbsList = db.models.boardList
 const board = db.models.board
@@ -32,13 +33,39 @@ router.get("/posts/:num", async (req, res) => {
 router.get("/board/:name", async (req, res) => {
     // console.log(req.params.name);
     try {
+        // posting 결과와 댓글 수 같이 가져오기
         if (req.params.name != null) {
-            const result = await board.findAll({ where: { b_category: req.params.name } })
-            // console.log(result);
-            res.status(200).json(result)
+            const result = await board.findAll({
+                where: { b_category: req.params.name },
+                include: [
+                    {
+                        model: reply,
+                        as: 'replies',
+                        attributes: [],
+                    }
+                ],
+                attributes: {
+                    include: [
+                        [
+                            sequelize.literal(`(
+                    SELECT COUNT(*)
+                    FROM reply
+                    WHERE reply.rb_num = board.b_num
+                )`),
+                            'repliesCount'
+                        ],
+                    ]
+                },
+                group: ['board.b_num'],
+                raw: true,
+            });
+            console.log(result);
+            res.status(200).json(result);
         }
-    } catch (error) {
 
+
+    } catch (error) {
+        console.log(error);
     }
 
 })

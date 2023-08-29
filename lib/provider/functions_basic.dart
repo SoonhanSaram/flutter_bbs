@@ -10,6 +10,7 @@ class FunctionsBasic extends ChangeNotifier {
   final List<Map<String, dynamic>> _posts = [];
   List<Map<String, dynamic>> get posts => _posts;
 
+  // 학과 리스트 가져오기
   Future<void> getBoard() async {
     boardNames.clear();
     final response = await http.get(
@@ -24,6 +25,7 @@ class FunctionsBasic extends ChangeNotifier {
   }
 
   String get currentBoard => _currentBoard;
+  // 학과별 글 가져오기
   Future<void> getBoardList(String boardName) async {
     _posts.clear();
     if (boardName.isNotEmpty) {

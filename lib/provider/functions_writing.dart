@@ -28,6 +28,7 @@ class FunctionsWriting extends ChangeNotifier {
     );
   }
 
+  // 글쓰기
   Future<void> postingBoard(BuildContext context, title, content, String? currentBoard, token) async {
     if (title == "") {
       callSnackBar(context, "제목을 입력해주세요");
